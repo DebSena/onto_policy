@@ -1,0 +1,202 @@
+version: "1.0"
+
+policies:
+
+  # ---------------------------------------------------------
+  # Data Mapping Change
+  # ---------------------------------------------------------
+  - id: DATA-001
+    name: data-mapping-change
+    description: Change to mapping between ontology elements and data sources.
+
+    conditions:
+      change_type: data
+      data_change_type: mapping
+      impact: minor
+
+    validation:
+      pipelines:
+        - ontology-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - data_owner
+
+    security:
+      required: false
+
+    approval:
+      minimum: 1
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  # ---------------------------------------------------------
+  # Major Data Mapping Change
+  # ---------------------------------------------------------
+  - id: DATA-002
+    name: data-mapping-major-change
+    description: Major modification to data mappings that may affect downstream consumers.
+
+    conditions:
+      change_type: data
+      data_change_type: mapping
+      impact: major
+
+    validation:
+      pipelines:
+        - ontology-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - data_owner
+        - architecture
+
+    security:
+      required: false
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  # ---------------------------------------------------------
+  # Sensitive Data Mapping
+  # ---------------------------------------------------------
+  - id: DATA-003
+    name: sensitive-data-mapping
+    description: Mapping involving sensitive or regulated data.
+
+    conditions:
+      change_type: data
+      sensitive_data: true
+
+    validation:
+      pipelines:
+        - ontology-validation
+        - dependency-validation
+        - security-validation
+
+    governance:
+      groups:
+        - data_owner
+        - security
+
+    security:
+      required: true
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  # ---------------------------------------------------------
+  # Data Source Change
+  # ---------------------------------------------------------
+  - id: DATA-004
+    name: data-source-change
+    description: Change to the source system or source dataset used by an ontology.
+
+    conditions:
+      change_type: data
+      data_change_type: source
+
+    validation:
+      pipelines:
+        - dependency-validation
+        - ontology-validation
+
+    governance:
+      groups:
+        - data_owner
+        - application_owner
+
+    security:
+      required: false
+
+    approval:
+      minimum: 1
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  # ---------------------------------------------------------
+  # Data Transformation Change
+  # ---------------------------------------------------------
+  - id: DATA-005
+    name: data-transformation-change
+    description: Change to transformation or derivation logic applied to data.
+
+    conditions:
+      change_type: data
+      data_change_type: transformation
+
+    validation:
+      pipelines:
+        - dependency-validation
+        - ontology-validation
+
+    governance:
+      groups:
+        - data_owner
+        - domain_sme
+
+    security:
+      required: false
+
+    approval:
+      minimum: 1
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  # ---------------------------------------------------------
+  # Data Deletion
+  # ---------------------------------------------------------
+  - id: DATA-006
+    name: data-deletion
+    description: Removal of a data source, mapping, or data element.
+
+    conditions:
+      change_type: data
+      intent: deletion
+
+    validation:
+      pipelines:
+        - dependency-validation
+        - ontology-validation
+
+    governance:
+      groups:
+        - data_owner
+        - architecture
+
+    security:
+      required: false
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true

@@ -1,0 +1,129 @@
+version: "1.0"
+
+policies:
+
+  
+  - id: API-001
+    name: api-minor-change
+    description: Minor API change that does not break existing consumers.
+
+    conditions:
+      change_type: api
+      impact: minor
+      breaking_change: false
+
+    validation:
+      pipelines:
+        - application-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - application_owner
+
+    security:
+      required: false
+
+    approval:
+      minimum: 1
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  
+  - id: API-002
+    name: api-major-change
+    description: Major API change that may affect existing consumers.
+
+    conditions:
+      change_type: api
+      impact: major
+
+    validation:
+      pipelines:
+        - application-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - application_owner
+        - architecture
+
+    security:
+      required: false
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+ 
+  - id: API-003
+    name: api-breaking-change
+    description: API change that breaks compatibility with existing consumers.
+
+    conditions:
+      change_type: api
+      breaking_change: true
+
+    validation:
+      pipelines:
+        - application-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - application_owner
+        - architecture
+
+    security:
+      required: false
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  
+  - id: API-004
+    name: api-authentication-change
+    description: API change affecting authentication or authorization mechanisms.
+
+    conditions:
+      change_type: api
+      security_impact: true
+      authentication_change: true
+
+    validation:
+      pipelines:
+        - application-validation
+        - dependency-validation
+        - security-validation
+
+    governance:
+      groups:
+        - application_owner
+        - security
+        - architecture
+
+    security:
+      required: true
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true

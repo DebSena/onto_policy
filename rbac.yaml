@@ -1,0 +1,178 @@
+version: "1.0"
+
+policies:
+
+  - id: RBAC-001
+    name: read-only-role
+    description: >
+      Creation or modification of a read-only role.
+
+    conditions:
+      change_type: role_access
+      access_level: read_only
+
+    validation:
+      pipelines:
+        - rbac-validation
+
+    governance:
+      groups:
+        - resource_owner
+
+    security:
+      required: false
+
+    approval:
+      minimum: 1
+
+    enabled: true
+
+
+  - id: RBAC-002
+    name: editor-role
+    description: >
+      Creation or modification of a standard editor role.
+
+    conditions:
+      change_type: role_access
+      access_level: editor
+
+    validation:
+      pipelines:
+        - rbac-validation
+
+    governance:
+      groups:
+        - resource_owner
+        - domain_owner
+
+    security:
+      required: false
+
+    approval:
+      minimum: 1
+
+    enabled: true
+
+
+  - id: RBAC-003
+    name: approver-role
+    description: >
+      Role that can approve governance or ontology changes.
+
+    conditions:
+      change_type: role_access
+      permissions_include:
+        - approve
+
+    validation:
+      pipelines:
+        - rbac-validation
+        - security-validation
+
+    governance:
+      groups:
+        - resource_owner
+        - security
+        - governance
+
+    security:
+      required: true
+      risk: high
+
+    approval:
+      minimum: 2
+
+    enabled: true
+
+
+  - id: RBAC-004
+    name: publisher-role
+    description: >
+      Role that can publish ontology changes.
+
+    conditions:
+      change_type: role_access
+      permissions_include:
+        - publish
+
+    validation:
+      pipelines:
+        - rbac-validation
+        - security-validation
+
+    governance:
+      groups:
+        - resource_owner
+        - security
+        - architecture
+
+    security:
+      required: true
+      risk: high
+
+    approval:
+      minimum: 2
+
+    enabled: true
+
+
+  - id: RBAC-005
+    name: administrator-role
+    description: >
+      Administrative or unrestricted role.
+
+    conditions:
+      change_type: role_access
+      access_level: admin
+
+    validation:
+      pipelines:
+        - rbac-validation
+        - security-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - resource_owner
+        - security
+        - architecture
+
+    security:
+      required: true
+      risk: critical
+
+    approval:
+      minimum: 3
+
+    enabled: true
+
+
+  - id: RBAC-006
+    name: permission-escalation
+    description: >
+      Existing role receives additional or more privileged
+      permissions.
+
+    conditions:
+      change_type: role_access
+      permission_change: escalation
+
+    validation:
+      pipelines:
+        - rbac-validation
+        - security-validation
+
+    governance:
+      groups:
+        - resource_owner
+        - security
+
+    security:
+      required: true
+      risk: high
+
+    approval:
+      minimum: 2
+
+    enabled: true

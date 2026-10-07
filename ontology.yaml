@@ -1,0 +1,167 @@
+version: "1.0"
+
+policies:
+
+  - id: ONT-001
+    name: ontology-minor-enhancement
+    description: >
+      Allows non-breaking enhancements to an existing ontology.
+
+    conditions:
+      change_type: ontology
+      intent: enhancement
+      impact: minor
+
+    classification:
+      allowed: true
+      final_impact: minor
+
+    validation:
+      pipelines:
+        - ontology-validation
+
+    governance:
+      groups:
+        - domain_sme
+
+    security:
+      required: false
+
+    approval:
+      minimum: 1
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  - id: ONT-002
+    name: ontology-major-enhancement
+    description: >
+      Handles major or potentially breaking changes to an
+      existing ontology.
+
+    conditions:
+      change_type: ontology
+      intent: enhancement
+      impact: major
+
+    validation:
+      pipelines:
+        - ontology-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - domain_sme
+        - ontology_governance
+        - architecture
+
+    security:
+      required: false
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  - id: ONT-003
+    name: new-ontology
+    description: >
+      Handles creation of a new ontology.
+
+    conditions:
+      change_type: ontology
+      intent: new
+
+    validation:
+      pipelines:
+        - ontology-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - domain_sme
+        - ontology_governance
+        - architecture
+
+    security:
+      required: false
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  - id: ONT-004
+    name: shared-ontology-change
+    description: >
+      Handles changes to shared or core ontology resources.
+
+    conditions:
+      change_type: ontology
+      scope: shared
+
+    validation:
+      pipelines:
+        - ontology-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - domain_sme
+        - ontology_governance
+        - architecture
+
+    security:
+      required: false
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true
+
+
+  - id: ONT-005
+    name: ontology-deletion
+    description: >
+      Handles deletion of ontology entities, properties
+      or relationships.
+
+    conditions:
+      change_type: ontology
+      intent: deletion
+
+    validation:
+      pipelines:
+        - ontology-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - domain_sme
+        - ontology_governance
+        - architecture
+
+    security:
+      required: false
+
+    approval:
+      minimum: 2
+
+    merge:
+      requires_approval: true
+
+    enabled: true

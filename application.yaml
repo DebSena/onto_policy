@@ -1,0 +1,71 @@
+version: "1.0"
+
+policies:
+
+  - id: APP-001
+    name: application-minor-change
+
+    conditions:
+      change_type: application
+      impact: minor
+
+    validation:
+      pipelines:
+        - application-validation
+
+    governance:
+      groups:
+        - application_owner
+
+    delivery:
+      mechanism: pull_request
+
+    approval:
+      minimum: 1
+
+
+  - id: APP-002
+    name: application-major-change
+
+    conditions:
+      change_type: application
+      impact: major
+
+    validation:
+      pipelines:
+        - application-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - application_owner
+        - architecture
+
+    delivery:
+      mechanism: pull_request
+
+    approval:
+      minimum: 2
+
+
+  - id: APP-003
+    name: application-bug-fix
+
+    conditions:
+      change_type: application
+      intent: bug_fix
+      impact: minor
+
+    validation:
+      pipelines:
+        - application-validation
+
+    governance:
+      groups:
+        - application_owner
+
+    delivery:
+      mechanism: pull_request
+
+    approval:
+      minimum: 1

@@ -1,0 +1,63 @@
+version: "1.0"
+
+policies:
+
+  - id: UI-001
+    name: ui-minor-enhancement
+
+    conditions:
+      change_type: ui
+      intent: enhancement
+      impact: minor
+
+    validation:
+      pipelines:
+        - ui-validation
+
+    governance:
+      groups:
+        - ui_owner
+
+    approval:
+      minimum: 1
+
+
+  - id: UI-002
+    name: ui-major-change
+
+    conditions:
+      change_type: ui
+      impact: major
+
+    validation:
+      pipelines:
+        - ui-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - ui_owner
+        - architecture
+
+    approval:
+      minimum: 2
+
+
+  - id: UI-003
+    name: ui-bug-fix
+
+    conditions:
+      change_type: ui
+      intent: bug_fix
+      impact: minor
+
+    validation:
+      pipelines:
+        - ui-validation
+
+    governance:
+      groups:
+        - ui_owner
+
+    approval:
+      minimum: 1

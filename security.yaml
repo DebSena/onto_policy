@@ -1,0 +1,113 @@
+version: "1.0"
+
+policies:
+
+  - id: SEC-001
+    name: security-impact
+    description: >
+      Cross-cutting security policy triggered when a change
+      has security implications.
+
+    conditions:
+      security_impact: true
+
+    validation:
+      pipelines:
+        - security-validation
+
+    governance:
+      groups:
+        - security
+
+    security:
+      required: true
+
+    approval:
+      minimum: 1
+
+    enabled: true
+
+
+  - id: SEC-002
+    name: authentication-change
+    description: >
+      Changes to authentication mechanisms or authentication
+      flows.
+
+    conditions:
+      authentication_changed: true
+
+    validation:
+      pipelines:
+        - security-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - security
+        - architecture
+
+    security:
+      required: true
+      risk: critical
+
+    approval:
+      minimum: 2
+
+    enabled: true
+
+
+  - id: SEC-003
+    name: sensitive-data-access
+    description: >
+      Changes that introduce or modify access to sensitive data.
+
+    conditions:
+      sensitive_data_access_changed: true
+
+    validation:
+      pipelines:
+        - security-validation
+        - dependency-validation
+
+    governance:
+      groups:
+        - security
+        - data_owner
+
+    security:
+      required: true
+      risk: high
+
+    approval:
+      minimum: 2
+
+    enabled: true
+
+
+  - id: SEC-004
+    name: production-access
+    description: >
+      Changes that grant or modify production access.
+
+    conditions:
+      production_access_changed: true
+
+    validation:
+      pipelines:
+        - security-validation
+        - rbac-validation
+
+    governance:
+      groups:
+        - security
+        - platform_owner
+
+    security:
+      required: true
+      risk: critical
+
+    approval:
+      minimum: 2
+
+    enabled: true

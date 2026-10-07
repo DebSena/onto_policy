@@ -1,0 +1,68 @@
+version: "1.0"
+
+policies:
+
+  - id: COMMON-001
+    name: breaking-change
+
+    conditions:
+      breaking_change: true
+
+    additional_validation:
+      pipelines:
+        - dependency-validation
+
+    additional_governance:
+      groups:
+        - architecture
+
+    additional_approval:
+      minimum: 1
+
+
+  - id: COMMON-002
+    name: shared-resource
+
+    conditions:
+      scope: shared
+
+    additional_validation:
+      pipelines:
+        - dependency-validation
+
+    additional_governance:
+      groups:
+        - architecture
+
+
+  - id: COMMON-003
+    name: security-overlay
+
+    conditions:
+      security_impact: true
+
+    additional_validation:
+      pipelines:
+        - security-validation
+
+    additional_governance:
+      groups:
+        - security
+
+    additional_approval:
+      minimum: 1
+
+
+  - id: COMMON-004
+    name: high-risk-change
+
+    conditions:
+      risk:
+        in:
+          - high
+          - critical
+
+    additional_governance:
+      groups:
+        - security
+        - architecture
