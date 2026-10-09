@@ -1,0 +1,63 @@
+version: "1.0"
+
+policies:
+  - id: SEC-001
+    name: security-minor-change
+    description: Make a limited security improvement without changing the core security architecture.
+    conditions:
+      change_type: security
+      impact: minor
+    validation:
+      pipelines:
+        - security-validation
+    governance:
+      groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    approval:
+      minimum: 1
+      required_groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    enabled: true
+
+  - id: SEC-002
+    name: security-major-change
+    description: Change authentication, authorization architecture, encryption, or major security controls.
+    conditions:
+      change_type: security
+      impact: major
+    validation:
+      pipelines:
+        - security-validation
+        - dependency-validation
+    governance:
+      groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+        - "OKTA_ONTOLOGY_Enterprise_Governance"
+    approval:
+      minimum: 1
+      required_groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    enterprise_review:
+      required: true
+      group: "OKTA_ONTOLOGY_Enterprise_Governance"
+    merge:
+      requires_approval: true
+    enabled: true
+
+  - id: SEC-003
+    name: security-bug-fix
+    description: Fix a security defect or vulnerability.
+    conditions:
+      change_type: security
+      intent: bug_fix
+    validation:
+      pipelines:
+        - security-validation
+    governance:
+      groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    approval:
+      minimum: 1
+      required_groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    enabled: true
