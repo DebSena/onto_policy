@@ -1,0 +1,82 @@
+version: "1.0"
+
+policies:
+  - id: RBAC-001
+    name: role-access-minor-change
+    description: Assign or revoke an existing role without expanding its permissions.
+    conditions:
+      change_type: role_access
+      impact: minor
+    validation:
+      pipelines:
+        - rbac-validation
+    governance:
+      groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    approval:
+      minimum: 1
+      required_groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    enabled: true
+
+  - id: RBAC-002
+    name: role-access-major-change
+    description: Change role permissions, resource scope, or access-control rules.
+    conditions:
+      change_type: role_access
+      impact: major
+    validation:
+      pipelines:
+        - rbac-validation
+        - security-validation
+        - dependency-validation
+    governance:
+      groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    approval:
+      minimum: 1
+      required_groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    enabled: true
+
+  - id: RBAC-003
+    name: privilege-escalation
+    description: Grant administrative, publishing, approval, or otherwise elevated permissions.
+    conditions:
+      change_type: role_access
+      permission_escalation: true
+    validation:
+      pipelines:
+        - rbac-validation
+        - security-validation
+    governance:
+      groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+        - "OKTA_ONTOLOGY_Enterprise_Governance"
+    approval:
+      minimum: 1
+      required_groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    enterprise_review:
+      required: true
+      group: "OKTA_ONTOLOGY_Enterprise_Governance"
+    enabled: true
+
+  - id: RBAC-004
+    name: role-definition-deletion
+    description: Delete a role or permission definition.
+    conditions:
+      change_type: role_access
+      intent: deletion
+    validation:
+      pipelines:
+        - rbac-validation
+        - dependency-validation
+    governance:
+      groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    approval:
+      minimum: 1
+      required_groups:
+        - "OKTA_ONTOLOGY_NAME_Reviewer"
+    enabled: true
